@@ -9,6 +9,29 @@
             text-align: center;
             margin-top: 100px;
         }
+        .loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid black;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+        @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+        button:hover {
+    background: #333;
+}
+        #result {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
 
         .box {
             background: white;
@@ -61,9 +84,21 @@ async function getWeather() {
     let apiKey = "3bffcbb2ed1fb07bb8bd71cf9aec083a";
     let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
+    document.getElementById("result").innerHTML=`<div class="loader"></div>`;
     try {
         let response = await fetch(url);
         let data = await response.json();
+        let condition = data.weather[0].main.toLowerCase();
+
+    if (condition.includes("rain")) {
+    document.body.style.background = "linear-gradient(to right, #4e54c8, #8f94fb)";
+    } 
+    else if (condition.includes("clear")) {
+    document.body.style.background = "linear-gradient(to right, #fceabb, #f8b500)";
+    } 
+    else {
+    document.body.style.background = "linear-gradient(to right, #bdc3c7, #2c3e50)";
+    }
 
         if(data.cod === "404") {
             document.getElementById("result").innerHTML = "<p>City not found ❌</p>";
